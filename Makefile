@@ -29,14 +29,14 @@ clean:
 ## Lint using flake8 and black (use `make format` to do formatting)
 .PHONY: lint
 lint:
-	flake8 deforestation_in_africa_using_ai
-	isort --check --diff --profile black deforestation_in_africa_using_ai
-	black --check --config pyproject.toml deforestation_in_africa_using_ai
+	flake8 deforestation_in_africa
+	isort --check --diff --profile black deforestation_in_africa
+	black --check --config pyproject.toml deforestation_in_africa
 
 ## Format source code with black
 .PHONY: format
 format:
-	black --config pyproject.toml deforestation_in_africa_using_ai
+	black --config pyproject.toml deforestation_in_africa
 
 
 ## Download Data from storage system
@@ -74,7 +74,7 @@ create_environment:
 ## Make Dataset
 .PHONY: data
 data: requirements
-	$(PYTHON_INTERPRETER) deforestation_in_africa_using_ai/dataset.py
+	$(PYTHON_INTERPRETER) deforestation_in_africa/dataset.py
 
 
 #################################################################################

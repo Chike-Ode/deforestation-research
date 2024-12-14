@@ -39,9 +39,9 @@ Identification of deforestation in Africa using spatiotemporal GIS data.
 │
 ├── setup.cfg          <- Configuration file for flake8
 │
-└── deforestation_in_africa_using_ai   <- Source code for use in this project.
+└── deforestation_in_africa   <- Source code for use in this project.
     │
-    ├── __init__.py             <- Makes deforestation_in_africa_using_ai a Python module
+    ├── __init__.py             <- Makes deforestation_in_africa a Python module
     │
     ├── config.py               <- Store useful variables and configuration
     │
