@@ -1,20 +1,21 @@
 from pathlib import Path
 import os
-from pystac_client import Client  # Import the Client class from pystac_client library
+from pystac_client import Client  # Import the Client class from pystac_client library #https://pystac-client.readthedocs.io/en/stable/api.html#pystac_client.Client.search
 from odc.stac import load  # Import the load function from the odc.stac module
 import matplotlib.pyplot as plt  # Import the pyplot module from the matplotlib library
+from IPython.display import Image
 
-# import typer
+import typer
 from loguru import logger
 from tqdm import tqdm
 
 # from deforestation_in_africa.config import PROCESSED_DATA_DIR, RAW_DATA_DIR
 
-# app = typer.Typer()
+app = typer.Typer()
 PROCESSED_DATA_DIR = ""
 RAW_DATA_DIR = ""
 
-# @app.command()
+@app.command()
 def main(
     # ---- REPLACE DEFAULT PATHS AS APPROPRIATE ----
     input_path: Path = RAW_DATA_DIR ,#/ "dataset.csv",
@@ -30,7 +31,9 @@ def main(
     collection = "sentinel-2-l2a"
 
     # Define a bounding box for the search area [min_lon, min_lat, max_lon, max_lat]
-    ant_bbox = [30.444946, 36.804887, 30.933837, 37.059561]
+    # ant_bbox = [30.444946, 36.804887, 30.933837, 37.059561]
+    # ant_bbox = [3.8, 4.3, 14.7, 13.9]
+    ant_bbox = [8.0, 4.5, 10.0, 6.8]
 
     # Perform a search using the specified parameters
     search = client.search(collections=[collection], bbox=ant_bbox, datetime="2023-12")
@@ -70,5 +73,5 @@ def main(
 
 
 if __name__ == "__main__":
-    main()
-    # app()
+    # main()
+    app()
