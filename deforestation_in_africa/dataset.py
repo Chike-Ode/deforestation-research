@@ -28,15 +28,16 @@ def main(
     client = Client.open("http://earth-search.aws.element84.com/v1")
 
     # Specify the desired collection
-    collection = "sentinel-2-l2a"
+    # collection = "sentinel-2-l2a"
+    collection = "landsat-c2-l2"
 
     # Define a bounding box for the search area [min_lon, min_lat, max_lon, max_lat]
-    # ant_bbox = [30.444946, 36.804887, 30.933837, 37.059561]
+    ant_bbox = [30.444946, 36.804887, 30.933837, 37.059561]
     # ant_bbox = [3.8, 4.3, 14.7, 13.9]
-    ant_bbox = [8.0, 4.5, 10.0, 6.8]
+    # ant_bbox = [8.0, 4.5, 10.0, 6.8]
 
     # Perform a search using the specified parameters
-    search = client.search(collections=[collection], bbox=ant_bbox, datetime="2023-12")
+    search = client.search(collections=[collection], bbox=ant_bbox, datetime="2016-12")
     
     
     # Load data using the odc.stac load function based on the search results
