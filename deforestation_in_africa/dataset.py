@@ -10,15 +10,15 @@ from loguru import logger
 from tqdm import tqdm
 
 # from deforestation_in_africa.config import PROCESSED_DATA_DIR, RAW_DATA_DIR
+from config import PROCESSED_DATA_DIR, RAW_DATA_DIR
 
 app = typer.Typer()
-PROCESSED_DATA_DIR = ""
-RAW_DATA_DIR = ""
 
 @app.command()
 def main(
     # ---- REPLACE DEFAULT PATHS AS APPROPRIATE ----
-    input_path: Path = RAW_DATA_DIR ,#/ "dataset.csv",
+    # input_path: Path = RAW_DATA_DIR  / "test.nc",
+    input_path: Path = RAW_DATA_DIR  / "test.csv",
     output_path: Path = PROCESSED_DATA_DIR, # / "dataset.csv",
     # ----------------------------------------------
 ):
@@ -28,20 +28,25 @@ def main(
     client = Client.open("http://earth-search.aws.element84.com/v1")
 
     # Specify the desired collection
-    # collection = "sentinel-2-l2a"
-    collection = "landsat-c2-l2"
+    collection = "sentinel-2-l2a"
+    # collection = "landsat-c2-l2"
 
     # Define a bounding box for the search area [min_lon, min_lat, max_lon, max_lat]
-    ant_bbox = [30.444946, 36.804887, 30.933837, 37.059561]
+    # ant_bbox = [30.444946, 36.804887, 30.933837, 37.059561]
     # ant_bbox = [3.8, 4.3, 14.7, 13.9]
-    # ant_bbox = [8.0, 4.5, 10.0, 6.8]
+    ant_bbox = [8.0, 4.5, 10.0, 6.8]
 
     # Perform a search using the specified parameters
-    search = client.search(collections=[collection], bbox=ant_bbox, datetime="2016-12")
+    search = client.search(collections=[collection], bbox=ant_bbox, datetime="2019-12")
+    logger.info("Searching API complete")
     
     
     # Load data using the odc.stac load function based on the search results
     data = load(search.items(), bbox=ant_bbox, groupby="solar_day", chunks={})
+    logger.info("Loading data complete")
+    
+    # data.to_netcdf(input_path)
+    data.to_dataframe().to_csv(input_path)
 
     # Select a single time slice (e.g., the first time step) from the loaded data
     data_slice = data.isel(time=0)
