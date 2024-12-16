@@ -1,18 +1,32 @@
 from pathlib import Path
 import os
-from pystac_client import Client  # Import the Client class from pystac_client library #https://pystac-client.readthedocs.io/en/stable/api.html#pystac_client.Client.search
-from odc.stac import load  # Import the load function from the odc.stac module
-import matplotlib.pyplot as plt  # Import the pyplot module from the matplotlib library
+import folium
+import numpy as np
+from sentinelsat import SentinelAPI, read_geojson, geojson_to_wkt
+import geopandas as gpd
+import pandas as pd
+import rasterio
+import matplotlib.pyplot as plt
 from IPython.display import Image
-
+from shapely.geometry import MultiPolygon,Polygon
+import fiona 
+import wget
 import typer
 from loguru import logger
 from tqdm import tqdm
+from dotenv import load_dotenv
 
 # from deforestation_in_africa.config import PROCESSED_DATA_DIR, RAW_DATA_DIR
 from config import PROCESSED_DATA_DIR, RAW_DATA_DIR
+# Load environment variables from .env file if it exists
+project_dir = os.path.join(os.path.dirname(__file__), os.pardir)
+dotenv_path = os.path.join(project_dir, '.env')
+load_dotenv(dotenv_path)
+user = os.environ.get("SENTINEL_USER")
+pw = os.environ.get("SENTINEL_PW")
 
 app = typer.Typer()
+
 
 @app.command()
 def main(
@@ -24,58 +38,7 @@ def main(
 ):
     # ---- REPLACE THIS WITH YOUR OWN CODE ----
     logger.info("Processing dataset...")
-    # Connect to the STAC API endpoint
-    client = Client.open("http://earth-search.aws.element84.com/v1")
-
-    # Specify the desired collection
-    collection = "sentinel-2-l2a"
-    # collection = "landsat-c2-l2"
-
-    # Define a bounding box for the search area [min_lon, min_lat, max_lon, max_lat]
-    ant_bbox = [30.444946, 36.804887, 30.933837, 37.059561]
-    # ant_bbox = [3.8, 4.3, 14.7, 13.9]
-    # ant_bbox = [8.0, 4.5, 10.0, 6.8]
-
-    # Perform a search using the specified parameters
-    search = client.search(collections=[collection], bbox=ant_bbox, datetime="2019-12")
-    logger.info("Searching API complete")
-    
-    
-    # Load data using the odc.stac load function based on the search results
-    data = load(search.items(), bbox=ant_bbox, groupby="solar_day", chunks={})
-    logger.info("Loading data complete")
-    print(type(data))
-    
-    # data.to_netcdf(input_path)
-    # data.to_dataframe().to_csv(input_path)
-
-    # Select a single time slice (e.g., the first time step) from the loaded data
-    data_slice = data.isel(time=0)
-    print(data_slice)
-    data_slice.to_netcdf(input_path)
-    
-    # Plotting the "red", "green", and "blue" bands individually
-    plt.figure(figsize=(15, 5))  # Adjusted the total size of the figure
-
-    # Adjusting the space between subplots
-    plt.subplots_adjust(wspace=0.4)  # Change the value according to your preference
-
-    # Subplot 1
-    plt.subplot(131)
-    data_slice["red"].plot.imshow(robust=True)
-    plt.title("Red Band")
-
-    # Subplot 2
-    plt.subplot(132)
-    data_slice["green"].plot.imshow(robust=True)
-    plt.title("Green Band")
-
-    # Subplot 3
-    plt.subplot(133)
-    data_slice["blue"].plot.imshow(robust=True)
-    plt.title("Blue Band")
-
-    plt.show()
+    api = SentinelAPI(user,pw,'https://scihub.copernicus.eu/dhus')
     
     logger.success("Processing dataset complete.")
     # -----------------------------------------
