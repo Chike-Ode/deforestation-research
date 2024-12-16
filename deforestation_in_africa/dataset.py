@@ -32,9 +32,9 @@ def main(
     # collection = "landsat-c2-l2"
 
     # Define a bounding box for the search area [min_lon, min_lat, max_lon, max_lat]
-    # ant_bbox = [30.444946, 36.804887, 30.933837, 37.059561]
+    ant_bbox = [30.444946, 36.804887, 30.933837, 37.059561]
     # ant_bbox = [3.8, 4.3, 14.7, 13.9]
-    ant_bbox = [8.0, 4.5, 10.0, 6.8]
+    # ant_bbox = [8.0, 4.5, 10.0, 6.8]
 
     # Perform a search using the specified parameters
     search = client.search(collections=[collection], bbox=ant_bbox, datetime="2019-12")
@@ -44,12 +44,15 @@ def main(
     # Load data using the odc.stac load function based on the search results
     data = load(search.items(), bbox=ant_bbox, groupby="solar_day", chunks={})
     logger.info("Loading data complete")
+    print(type(data))
     
     # data.to_netcdf(input_path)
-    data.to_dataframe().to_csv(input_path)
+    # data.to_dataframe().to_csv(input_path)
 
     # Select a single time slice (e.g., the first time step) from the loaded data
     data_slice = data.isel(time=0)
+    print(data_slice)
+    data_slice.to_netcdf(input_path)
     
     # Plotting the "red", "green", and "blue" bands individually
     plt.figure(figsize=(15, 5))  # Adjusted the total size of the figure
