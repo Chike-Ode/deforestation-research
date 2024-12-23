@@ -42,10 +42,12 @@ def main(
     # ---- REPLACE THIS WITH YOUR OWN CODE ----
     logger.info("Processing dataset...")
     start_date = '2005-05-01'
-    end_date = '2005-05-04'
+    end_date = '2023-06-04'
     # random region 
-    roi = ee.Geometry.Rectangle([4.3, 3.8, 13.9, 14.7])
+    # roi = ee.Geometry.Rectangle([4.3, 3.8, 13.9, 14.7])
     # roi = ee.Geometry.Rectangle([-26.5, 43.2, -11.5, 50.5])
+    # roi = ee.Geometry.Point(46,-19)
+    roi = ee.Geometry.Point(49.73,-15.12)
     # roi = ee.Geometry.Rectangle([-104.05, 49.05, -96.55, 45.05])
 
     # Filter the Landsat collection
