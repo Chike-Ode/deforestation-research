@@ -41,8 +41,9 @@ def main(
 ):
     # ---- REPLACE THIS WITH YOUR OWN CODE ----
     logger.info("Processing dataset...")
-    start_date = '2005-05-01'
+    start_date = '1999-05-01'
     end_date = '2023-06-04'
+    # end_date = '2005-06-04'
     # random region 
     # roi = ee.Geometry.Rectangle([4.3, 3.8, 13.9, 14.7])
     # roi = ee.Geometry.Rectangle([-26.5, 43.2, -11.5, 50.5])
@@ -51,8 +52,13 @@ def main(
     # roi = ee.Geometry.Rectangle([-104.05, 49.05, -96.55, 45.05])
 
     # Filter the Landsat collection
-    landsat = ee.ImageCollection("LANDSAT/LE07/C02/T1_L2").filterDate(start_date, end_date).filterBounds(roi)
-    
+    landsat = (
+                ee.ImageCollection("LANDSAT/LE07/C02/T1_L2")
+                .filterDate(start_date, end_date)
+                .filterBounds(roi)
+                # .filter(ee.Filter.eq('CLOUD_COVER',80))
+                )
+    # print(landsat.getInfo())
     print(landsat.size().getInfo())
     # 10 -  number of images found
 
